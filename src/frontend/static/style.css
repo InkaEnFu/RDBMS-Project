@@ -156,3 +156,19 @@ form input:focus, form select:focus {
 .actions {
     margin-bottom: 20px;
 }
+
+.error-page {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.error-page h1 {
+    color: #e94560;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    color: #aaa;
+    margin-bottom: 30px;
+}

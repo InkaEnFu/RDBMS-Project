@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import csv
 import io
-from connection import DatabaseConnection, Config
+import re
+from connection import DatabaseConnection, Config, ConfigError, DatabaseError
 from tables.anime_gateway import AnimeGateway
 from tables.user_gateway import UserGateway
 from tables.genre_gateway import GenreGateway
@@ -22,6 +23,38 @@ genre_gw = GenreGateway()
 anime_genre_gw = AnimeGenreGateway()
 watchlist_entry_gw = WatchlistEntryGateway()
 watchlist_history_gw = WatchlistHistoryGateway()
+
+
+def validate_required(form, fields):
+    for field in fields:
+        if field not in form or not form[field].strip():
+            return False, f"Field '{field}' is required"
+    return True, None
+
+
+def validate_email(email):
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return bool(re.match(pattern, email))
+
+
+@app.errorhandler(ConfigError)
+def handle_config_error(e):
+    return render_template('error.html', title='Configuration Error', message=str(e)), 500
+
+
+@app.errorhandler(DatabaseError)
+def handle_database_error(e):
+    return render_template('error.html', title='Database Error', message=str(e)), 500
+
+
+@app.errorhandler(404)
+def handle_not_found(e):
+    return render_template('error.html', title='Page Not Found', message='The requested page does not exist'), 404
+
+
+@app.errorhandler(500)
+def handle_server_error(e):
+    return render_template('error.html', title='Server Error', message='An unexpected error occurred'), 500
 
 
 @app.route('/')
@@ -46,13 +79,32 @@ def anime_list():
 @app.route('/anime/add', methods=['GET', 'POST'])
 def anime_add():
     if request.method == 'POST':
-        title_romaji = request.form['title_romaji']
-        title_english = request.form.get('title_english') or None
-        episodes = int(request.form.get('episodes') or 0)
+        valid, error = validate_required(request.form, ['title_romaji', 'status'])
+        if not valid:
+            flash(error, 'error')
+            return render_template('anime_add.html', genres=genre_gw.select_all())
+        
+        title_romaji = request.form['title_romaji'].strip()
+        title_english = request.form.get('title_english', '').strip() or None
         status = request.form['status']
         start_date = request.form.get('start_date') or None
-        external_score = float(request.form['external_score']) if request.form.get('external_score') else None
         genre_ids = request.form.getlist('genres')
+        
+        try:
+            episodes = int(request.form.get('episodes') or 0)
+            if episodes < 0:
+                raise ValueError("Episodes cannot be negative")
+        except ValueError as e:
+            flash(f'Invalid episodes value: {e}', 'error')
+            return render_template('anime_add.html', genres=genre_gw.select_all())
+        
+        try:
+            external_score = float(request.form['external_score']) if request.form.get('external_score') else None
+            if external_score is not None and (external_score < 0 or external_score > 10):
+                raise ValueError("Score must be between 0 and 10")
+        except ValueError as e:
+            flash(f'Invalid score value: {e}', 'error')
+            return render_template('anime_add.html', genres=genre_gw.select_all())
         
         try:
             new_id = anime_gw.insert(title_romaji, status, title_english, episodes, start_date, external_score)
@@ -122,9 +174,22 @@ def user_list():
 @app.route('/users/add', methods=['GET', 'POST'])
 def user_add():
     if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
+        valid, error = validate_required(request.form, ['username', 'email'])
+        if not valid:
+            flash(error, 'error')
+            return render_template('user_add.html')
+        
+        username = request.form['username'].strip()
+        email = request.form['email'].strip()
         is_admin = 'is_admin' in request.form
+        
+        if len(username) < 3 or len(username) > 32:
+            flash('Username must be between 3 and 32 characters', 'error')
+            return render_template('user_add.html')
+        
+        if not validate_email(email):
+            flash('Invalid email format', 'error')
+            return render_template('user_add.html')
         
         try:
             new_id = user_gw.insert(username, email, is_admin)
