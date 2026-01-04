@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Report - Animelist{% endblock %}
+
+{% block content %}
+<h1>Database Report</h1>
+<p style="color: #aaa; margin-bottom: 30px;">Aggregated statistics from the database</p>
+
+<h2 style="color: #e94560; margin-bottom: 20px;">Overview</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
+    <div style="background: #16213e; padding: 25px; border-radius: 10px; text-align: center;">
+        <p style="font-size: 3em; color: #e94560; margin-bottom: 5px;">{{ anime_count }}</p>
+        <p style="color: #aaa;">Total Anime</p>
+    </div>
+    <div style="background: #16213e; padding: 25px; border-radius: 10px; text-align: center;">
+        <p style="font-size: 3em; color: #e94560; margin-bottom: 5px;">{{ user_count }}</p>
+        <p style="color: #aaa;">Total Users</p>
+    </div>
+    <div style="background: #16213e; padding: 25px; border-radius: 10px; text-align: center;">
+        <p style="font-size: 3em; color: #e94560; margin-bottom: 5px;">{{ genre_count }}</p>
+        <p style="color: #aaa;">Total Genres</p>
+    </div>
+    <div style="background: #16213e; padding: 25px; border-radius: 10px; text-align: center;">
+        <p style="font-size: 3em; color: #e94560; margin-bottom: 5px;">{{ watchlist_count }}</p>
+        <p style="color: #aaa;">Watchlist Entries</p>
+    </div>
+</div>
+
+<h2 style="color: #e94560; margin-bottom: 20px;">Anime by Genre</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Genre</th>
+            <th>Anime Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stat in genres_stats %}
+        <tr>
+            <td>{{ stat[0] }}</td>
+            <td>{{ stat[1] }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="2">No data available.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

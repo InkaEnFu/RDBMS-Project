@@ -361,5 +361,41 @@ def transfer_anime():
     return render_template('transfer.html', users=users, anime=anime)
 
 
+@app.route('/report')
+def report():
+    conn = db.get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT COUNT(*) FROM anime")
+    anime_count = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM users")
+    user_count = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM genres")
+    genre_count = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM watchlist_entries")
+    watchlist_count = cursor.fetchone()[0]
+    
+    cursor.execute("""
+        SELECT g.name, COUNT(ag.anime_id) as anime_count
+        FROM genres g
+        LEFT JOIN anime_genres ag ON g.id = ag.genre_id
+        GROUP BY g.id, g.name
+        ORDER BY anime_count DESC
+    """)
+    genres_stats = cursor.fetchall()
+    
+    cursor.close()
+    
+    return render_template('report.html', 
+                           anime_count=anime_count,
+                           user_count=user_count,
+                           genre_count=genre_count,
+                           watchlist_count=watchlist_count,
+                           genres_stats=genres_stats)
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
