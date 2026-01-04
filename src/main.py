@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import csv
 import io
-from connection import DatabaseConnection
+from connection import DatabaseConnection, Config
 from tables.anime_gateway import AnimeGateway
 from tables.user_gateway import UserGateway
 from tables.genre_gateway import GenreGateway
@@ -9,8 +9,11 @@ from tables.anime_genre_gateway import AnimeGenreGateway
 from tables.watchlist_entry_gateway import WatchlistEntryGateway
 from tables.watchlist_history_gateway import WatchlistHistoryGateway
 
+config = Config()
+app_config = config.get_app_config()
+
 app = Flask(__name__, template_folder='frontend')
-app.secret_key = 'animelist_secret_key'
+app.secret_key = app_config.get('secret_key', 'animelist_secret_key')
 
 db = DatabaseConnection()
 anime_gw = AnimeGateway()
@@ -449,4 +452,4 @@ def import_csv():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=app_config.get('debug', True), port=app_config.get('port', 5000))
