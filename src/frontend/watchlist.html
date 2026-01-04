@@ -5,7 +5,18 @@
 {% block content %}
 <h1>Watchlist</h1>
 
-<a href="/watchlist/add" class="btn">Add Entry</a>
+<div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;">
+    <a href="/watchlist/add" class="btn">Add Entry</a>
+    <form method="GET" style="display: flex; gap: 10px;">
+        <input type="text" name="user" placeholder="Search by Username" value="{{ search_user or '' }}" style="padding: 8px; border-radius: 5px; border: none; background: #16213e; color: #eee; width: 160px;">
+        <button type="submit" class="btn">Search</button>
+    </form>
+    <form method="GET" style="display: flex; gap: 10px;">
+        <input type="text" name="anime" placeholder="Search by Anime" value="{{ search_anime or '' }}" style="padding: 8px; border-radius: 5px; border: none; background: #16213e; color: #eee; width: 160px;">
+        <button type="submit" class="btn">Search</button>
+    </form>
+    {% if search_user or search_anime %}<a href="/watchlist" style="color: #aaa; padding: 10px;">Clear</a>{% endif %}
+</div>
 
 <table>
     <thead>

@@ -28,10 +28,14 @@ def index():
 def anime_list():
     conn = db.get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM anime_with_genres_view")
+    search_id = request.args.get('id')
+    if search_id:
+        cursor.execute("SELECT * FROM anime_with_genres_view WHERE anime_id = %s", (search_id,))
+    else:
+        cursor.execute("SELECT * FROM anime_with_genres_view")
     anime = cursor.fetchall()
     cursor.close()
-    return render_template('anime.html', anime=anime)
+    return render_template('anime.html', anime=anime, search_id=search_id)
 
 
 @app.route('/anime/add', methods=['GET', 'POST'])
@@ -62,10 +66,21 @@ def anime_add():
 def user_list():
     conn = db.get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users")
+    search_id = request.args.get('id')
+    search_name = request.args.get('name')
+    search_email = request.args.get('email')
+    
+    if search_id:
+        cursor.execute("SELECT * FROM users WHERE id = %s", (search_id,))
+    elif search_name:
+        cursor.execute("SELECT * FROM users WHERE username LIKE %s", (f'%{search_name}%',))
+    elif search_email:
+        cursor.execute("SELECT * FROM users WHERE email LIKE %s", (f'%{search_email}%',))
+    else:
+        cursor.execute("SELECT * FROM users")
     users = cursor.fetchall()
     cursor.close()
-    return render_template('users.html', users=users)
+    return render_template('users.html', users=users, search_id=search_id, search_name=search_name, search_email=search_email)
 
 
 @app.route('/users/add', methods=['GET', 'POST'])
@@ -110,10 +125,18 @@ def genre_add():
 def watchlist():
     conn = db.get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM user_watchlist_view")
+    search_user = request.args.get('user')
+    search_anime = request.args.get('anime')
+    
+    if search_user:
+        cursor.execute("SELECT * FROM user_watchlist_view WHERE user_name LIKE %s", (f'%{search_user}%',))
+    elif search_anime:
+        cursor.execute("SELECT * FROM user_watchlist_view WHERE anime_name LIKE %s", (f'%{search_anime}%',))
+    else:
+        cursor.execute("SELECT * FROM user_watchlist_view")
     entries = cursor.fetchall()
     cursor.close()
-    return render_template('watchlist.html', entries=entries)
+    return render_template('watchlist.html', entries=entries, search_user=search_user, search_anime=search_anime)
 
 
 @app.route('/watchlist/add', methods=['GET', 'POST'])

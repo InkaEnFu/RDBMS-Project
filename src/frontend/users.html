@@ -5,7 +5,22 @@
 {% block content %}
 <h1>Users</h1>
 
-<a href="/users/add" class="btn">Add User</a>
+<div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;">
+    <a href="/users/add" class="btn">Add User</a>
+    <form method="GET" style="display: flex; gap: 10px;">
+        <input type="number" name="id" placeholder="Search by ID" value="{{ search_id or '' }}" style="padding: 8px; border-radius: 5px; border: none; background: #16213e; color: #eee; width: 120px;">
+        <button type="submit" class="btn">Search</button>
+    </form>
+    <form method="GET" style="display: flex; gap: 10px;">
+        <input type="text" name="name" placeholder="Search by Name" value="{{ search_name or '' }}" style="padding: 8px; border-radius: 5px; border: none; background: #16213e; color: #eee; width: 140px;">
+        <button type="submit" class="btn">Search</button>
+    </form>
+    <form method="GET" style="display: flex; gap: 10px;">
+        <input type="text" name="email" placeholder="Search by Email" value="{{ search_email or '' }}" style="padding: 8px; border-radius: 5px; border: none; background: #16213e; color: #eee; width: 160px;">
+        <button type="submit" class="btn">Search</button>
+    </form>
+    {% if search_id or search_name or search_email %}<a href="/users" style="color: #aaa; padding: 10px;">Clear</a>{% endif %}
+</div>
 
 <table>
     <thead>

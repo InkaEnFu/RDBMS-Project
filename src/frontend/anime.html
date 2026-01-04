@@ -5,8 +5,13 @@
 {% block content %}
 <h1>All Anime</h1>
 
-<div class="actions">
+<div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center;">
     <a href="/anime/add" class="btn">+ Add new anime</a>
+    <form method="GET" style="display: flex; gap: 10px;">
+        <input type="number" name="id" placeholder="Search by ID" value="{{ search_id or '' }}" style="padding: 8px; border-radius: 5px; border: none; background: #16213e; color: #eee;">
+        <button type="submit" class="btn">Search</button>
+        {% if search_id %}<a href="/anime" style="color: #aaa; padding: 10px;">Clear</a>{% endif %}
+    </form>
 </div>
 
 <table>
