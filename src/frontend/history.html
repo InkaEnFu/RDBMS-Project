@@ -5,28 +5,34 @@
 {% block content %}
 <h1>Watchlist History - User #{{ user_id }}</h1>
 
-<a href="/users" class="btn">Back to Users</a>
+<a href="/history" class="btn">Back to Users</a>
 
 <table>
     <thead>
         <tr>
-            <th>Entry ID</th>
+            <th>Action</th>
+            <th>Anime ID</th>
             <th>Old Status</th>
             <th>New Status</th>
+            <th>Old Progress</th>
+            <th>New Progress</th>
             <th>Changed At</th>
         </tr>
     </thead>
     <tbody>
-        {% for entry in history %}
+        {% for entry in entries %}
         <tr>
-            <td>{{ entry[1] }}</td>
-            <td>{{ entry[2] if entry[2] else '-' }}</td>
+            <td>{{ entry[10] }}</td>
+            <td>{{ entry[2] }}</td>
+            <td>{{ entry[4] if entry[4] else '-' }}</td>
+            <td>{{ entry[5] if entry[5] else '-' }}</td>
+            <td>{{ entry[8] }}</td>
+            <td>{{ entry[9] }}</td>
             <td>{{ entry[3] }}</td>
-            <td>{{ entry[4] }}</td>
         </tr>
         {% else %}
         <tr>
-            <td colspan="4">No history found for this user.</td>
+            <td colspan="7">No history found for this user.</td>
         </tr>
         {% endfor %}
     </tbody>

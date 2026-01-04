@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Watchlist Entry - Animelist{% endblock %}
+
+{% block content %}
+<h1>Edit Watchlist Entry</h1>
+
+<p style="margin-bottom: 20px; color: #aaa;">
+    <strong>User:</strong> {{ user[0] }} | <strong>Anime:</strong> {{ anime[0] }}
+</p>
+
+<form method="POST">
+    <label>Status *</label>
+    <select name="status" required>
+        <option value="PLAN_TO_WATCH" {% if entry[2] == 'PLAN_TO_WATCH' %}selected{% endif %}>PLAN_TO_WATCH</option>
+        <option value="WATCHING" {% if entry[2] == 'WATCHING' %}selected{% endif %}>WATCHING</option>
+        <option value="COMPLETED" {% if entry[2] == 'COMPLETED' %}selected{% endif %}>COMPLETED</option>
+        <option value="DROPPED" {% if entry[2] == 'DROPPED' %}selected{% endif %}>DROPPED</option>
+        <option value="PAUSED" {% if entry[2] == 'PAUSED' %}selected{% endif %}>PAUSED</option>
+    </select>
+    
+    <label>Score (1-10)</label>
+    <input type="number" name="score" min="1" max="10" value="{{ entry[3] if entry[3] else '' }}">
+    
+    <label>Progress (Episodes)</label>
+    <input type="number" name="progress" value="{{ entry[4] }}" min="0">
+    
+    <button type="submit" class="btn">Update Entry</button>
+    <a href="/watchlist" style="color: #aaa; margin-left: 15px;">Cancel</a>
+</form>
+{% endblock %}

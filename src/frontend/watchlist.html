@@ -15,20 +15,25 @@
             <th>Status</th>
             <th>Score</th>
             <th>Progress</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for entry in entries %}
         <tr>
-            <td>{{ entry[0] }}</td>
-            <td>{{ entry[1] }}</td>
             <td>{{ entry[2] }}</td>
-            <td>{{ entry[3] if entry[3] else '-' }}</td>
+            <td>{{ entry[3] }}</td>
             <td>{{ entry[4] }}</td>
+            <td>{{ entry[5] if entry[5] else '-' }}</td>
+            <td>{{ entry[6] }}</td>
+            <td>
+                <a href="/watchlist/edit/{{ entry[0] }}/{{ entry[1] }}">Edit</a>
+                <a href="/watchlist/delete/{{ entry[0] }}/{{ entry[1] }}" onclick="return confirm('Are you sure?')" style="color: #e94560; margin-left: 10px;">Delete</a>
+            </td>
         </tr>
         {% else %}
         <tr>
-            <td colspan="5">No watchlist entries found.</td>
+            <td colspan="6">No watchlist entries found.</td>
         </tr>
         {% endfor %}
     </tbody>

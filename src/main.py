@@ -142,6 +142,41 @@ def watchlist_add():
     return render_template('watchlist_add.html', users=users, anime=anime)
 
 
+@app.route('/watchlist/edit/<int:user_id>/<int:anime_id>', methods=['GET', 'POST'])
+def watchlist_edit(user_id, anime_id):
+    if request.method == 'POST':
+        status = request.form['status']
+        score = int(request.form['score']) if request.form.get('score') else None
+        progress = int(request.form.get('progress') or 0)
+        
+        try:
+            watchlist_entry_gw.update(user_id, anime_id, status, score, progress)
+            flash('Watchlist entry updated successfully', 'success')
+            return redirect(url_for('watchlist'))
+        except Exception as e:
+            flash(f'Error: {e}', 'error')
+    
+    entry = watchlist_entry_gw.select_by_id(user_id, anime_id)
+    conn = db.get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT username FROM users WHERE id = %s", (user_id,))
+    user = cursor.fetchone()
+    cursor.execute("SELECT title_romaji FROM anime WHERE id = %s", (anime_id,))
+    anime = cursor.fetchone()
+    cursor.close()
+    return render_template('watchlist_edit.html', entry=entry, user=user, anime=anime, user_id=user_id, anime_id=anime_id)
+
+
+@app.route('/watchlist/delete/<int:user_id>/<int:anime_id>')
+def watchlist_delete(user_id, anime_id):
+    try:
+        watchlist_entry_gw.delete(user_id, anime_id)
+        flash('Watchlist entry deleted successfully', 'success')
+    except Exception as e:
+        flash(f'Error: {e}', 'error')
+    return redirect(url_for('watchlist'))
+
+
 @app.route('/history')
 def history_list():
     conn = db.get_connection()

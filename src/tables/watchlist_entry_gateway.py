@@ -30,3 +30,25 @@ class WatchlistEntryGateway:
         row = cursor.fetchone()
         cursor.close()
         return row
+
+    def update(self, user_id: int, anime_id: int, state: str, rating: int = None, progress: int = 0) -> bool:
+        conn = self.db.get_connection()
+        cursor = conn.cursor()
+        query = f"""UPDATE {self.table_name} 
+                    SET state = %s, rating = %s, progress = %s 
+                    WHERE user_id = %s AND anime_id = %s"""
+        cursor.execute(query, (state, rating, progress, user_id, anime_id))
+        conn.commit()
+        affected = cursor.rowcount
+        cursor.close()
+        return affected > 0
+
+    def delete(self, user_id: int, anime_id: int) -> bool:
+        conn = self.db.get_connection()
+        cursor = conn.cursor()
+        query = f"DELETE FROM {self.table_name} WHERE user_id = %s AND anime_id = %s"
+        cursor.execute(query, (user_id, anime_id))
+        conn.commit()
+        affected = cursor.rowcount
+        cursor.close()
+        return affected > 0
