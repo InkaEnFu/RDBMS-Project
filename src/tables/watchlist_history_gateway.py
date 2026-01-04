@@ -30,3 +30,11 @@ class WatchlistHistoryGateway:
         row = cursor.fetchone()
         cursor.close()
         return row
+    
+    def select_by_user_id(self, user_id: int) -> list:
+        conn = self.db.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * FROM {self.table_name} WHERE user_id = %s ORDER BY changed_at DESC", (user_id,))
+        rows = cursor.fetchall()
+        cursor.close()
+        return rows

@@ -371,83 +371,41 @@ class Menu:
     def _watchlist_history_menu(self):
         while True:
             print("\n" + "-" * 40)
-            print("      MANAGE WATCHLIST HISTORY")
+            print("      WATCHLIST HISTORY")
             print("-" * 40)
-            print("1. Add entry to history")
-            print("2. Find entry by ID")
+            print("1. Find history by user ID")
             print("0. Back")
             print("-" * 40)
             
             choice = input("Enter choice: ").strip()
             
             if choice == "1":
-                self._watchlist_history_insert()
-            elif choice == "2":
-                self._watchlist_history_select_by_id()
+                self._watchlist_history_select_by_user()
             elif choice == "0":
                 break
             else:
                 print("Invalid choice.")
     
-    def _watchlist_history_insert(self):
-        print("\n--- Add entry to history ---")
-        
-        valid_states = ["WATCHING", "COMPLETED", "PLAN_TO_WATCH", "DROPPED", "ON_HOLD"]
-        
-        try:
-            user_id = int(input("User ID *: ").strip())
-            anime_id = int(input("Anime ID *: ").strip())
-            
-            old_state = input("Old state *: ").strip().upper()
-            if old_state not in valid_states:
-                print("Invalid old state!")
-                return
-            
-            new_state = input("New state *: ").strip().upper()
-            if new_state not in valid_states:
-                print("Invalid new state!")
-                return
-            
-            old_progress = int(input("Old progress *: ").strip())
-            new_progress = int(input("New progress *: ").strip())
-            
-            old_rating_str = input("Old rating (optional): ").strip()
-            old_rating = int(old_rating_str) if old_rating_str else None
-            
-            new_rating_str = input("New rating (optional): ").strip()
-            new_rating = int(new_rating_str) if new_rating_str else None
-            
-            new_id = self.watchlist_history_gw.insert(
-                user_id, anime_id, old_state, new_state,
-                old_progress, new_progress, old_rating, new_rating
-            )
-            print(f"✓ History entry successfully added with ID: {new_id}")
-        except ValueError:
-            print("Invalid value!")
-        except Exception as e:
-            print(f"✗ Error adding: {e}")
-    
-    def _watchlist_history_select_by_id(self):
-        print("\n--- Find history entry ---")
-        id_str = input("Enter entry ID: ").strip()
+    def _watchlist_history_select_by_user(self):
+        print("\n--- Find user history ---")
+        id_str = input("Enter user ID: ").strip()
         
         try:
-            history_id = int(id_str)
-            result = self.watchlist_history_gw.select_by_id(history_id)
-            if result:
-                print(f"\nEntry found:")
-                print(f"  ID: {result[0]}")
-                print(f"  User ID: {result[1]}")
-                print(f"  Anime ID: {result[2]}")
-                print(f"  Old state: {result[3]}")
-                print(f"  New state: {result[4]}")
-                print(f"  Old rating: {result[5]}")
-                print(f"  New rating: {result[6]}")
-                print(f"  Old progress: {result[7]}")
-                print(f"  New progress: {result[8]}")
-                print(f"  Change date: {result[9]}")
+            user_id = int(id_str)
+            results = self.watchlist_history_gw.select_by_user_id(user_id)
+            if results:
+                print(f"\nFound {len(results)} history entries for user {user_id}:")
+                print("-" * 80)
+                for result in results:
+                    print(f"  History ID: {result[0]}")
+                    print(f"  Anime ID: {result[2]}")
+                    print(f"  Change date: {result[3]}")
+                    print(f"  State: {result[4]} -> {result[5]}")
+                    print(f"  Rating: {result[6]} -> {result[7]}")
+                    print(f"  Progress: {result[8]} -> {result[9]}")
+                    print("-" * 80)
             else:
-                print("Entry with this ID was not found.")
+                print("No history found for this user.")
         except ValueError:
             print("Invalid ID!")
         except Exception as e:
