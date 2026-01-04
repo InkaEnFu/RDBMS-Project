@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Watchlist - Animelist{% endblock %}
+
+{% block content %}
+<h1>Watchlist</h1>
+
+<a href="/watchlist/add" class="btn">Add Entry</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Anime</th>
+            <th>Status</th>
+            <th>Score</th>
+            <th>Progress</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries %}
+        <tr>
+            <td>{{ entry[0] }}</td>
+            <td>{{ entry[1] }}</td>
+            <td>{{ entry[2] }}</td>
+            <td>{{ entry[3] if entry[3] else '-' }}</td>
+            <td>{{ entry[4] }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5">No watchlist entries found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

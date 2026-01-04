@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Animelist{% endblock %}
+
+{% block content %}
+<h1>Welcome to Animelist</h1>
+<p style="margin-bottom: 30px; color: #aaa;">Manage your anime watchlist database.</p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+    <a href="/anime" style="text-decoration: none;">
+        <div style="background: #16213e; padding: 30px; border-radius: 10px; text-align: center;">
+            <h2 style="color: #e94560; margin-bottom: 10px;">Anime</h2>
+            <p style="color: #aaa;">Browse and add anime</p>
+        </div>
+    </a>
+    <a href="/users" style="text-decoration: none;">
+        <div style="background: #16213e; padding: 30px; border-radius: 10px; text-align: center;">
+            <h2 style="color: #e94560; margin-bottom: 10px;">Users</h2>
+            <p style="color: #aaa;">Manage users</p>
+        </div>
+    </a>
+    <a href="/genres" style="text-decoration: none;">
+        <div style="background: #16213e; padding: 30px; border-radius: 10px; text-align: center;">
+            <h2 style="color: #e94560; margin-bottom: 10px;">Genres</h2>
+            <p style="color: #aaa;">View all genres</p>
+        </div>
+    </a>
+    <a href="/watchlist" style="text-decoration: none;">
+        <div style="background: #16213e; padding: 30px; border-radius: 10px; text-align: center;">
+            <h2 style="color: #e94560; margin-bottom: 10px;">Watchlist</h2>
+            <p style="color: #aaa;">View watchlist entries</p>
+        </div>
+    </a>
+    <a href="/history" style="text-decoration: none;">
+        <div style="background: #16213e; padding: 30px; border-radius: 10px; text-align: center;">
+            <h2 style="color: #e94560; margin-bottom: 10px;">History</h2>
+            <p style="color: #aaa;">View watchlist changes</p>
+        </div>
+    </a>
+</div>
+{% endblock %}

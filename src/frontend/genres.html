@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Genres - Animelist{% endblock %}
+
+{% block content %}
+<h1>Genres</h1>
+
+<a href="/genres/add" class="btn">Add Genre</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for genre in genres %}
+        <tr>
+            <td>{{ genre[0] }}</td>
+            <td>{{ genre[1] }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="2">No genres found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

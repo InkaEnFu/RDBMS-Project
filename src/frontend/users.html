@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Users - Animelist{% endblock %}
+
+{% block content %}
+<h1>Users</h1>
+
+<a href="/users/add" class="btn">Add User</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user[0] }}</td>
+            <td>{{ user[1] }}</td>
+            <td>{{ user[2] }}</td>
+            <td>
+                <a href="/history/{{ user[0] }}">View History</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4">No users found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

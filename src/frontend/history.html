@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}User History - Animelist{% endblock %}
+
+{% block content %}
+<h1>Watchlist History - User #{{ user_id }}</h1>
+
+<a href="/users" class="btn">Back to Users</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Entry ID</th>
+            <th>Old Status</th>
+            <th>New Status</th>
+            <th>Changed At</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in history %}
+        <tr>
+            <td>{{ entry[1] }}</td>
+            <td>{{ entry[2] if entry[2] else '-' }}</td>
+            <td>{{ entry[3] }}</td>
+            <td>{{ entry[4] }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4">No history found for this user.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

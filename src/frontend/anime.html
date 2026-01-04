@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Anime - Animelist{% endblock %}
+
+{% block content %}
+<h1>All Anime</h1>
+
+<div class="actions">
+    <a href="/anime/add" class="btn">+ Add new anime</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title (Romaji)</th>
+            <th>Title (English)</th>
+            <th>Status</th>
+            <th>Genres</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for a in anime %}
+        <tr>
+            <td>{{ a[0] }}</td>
+            <td>{{ a[1] or '-' }}</td>
+            <td>{{ a[2] or '-' }}</td>
+            <td>{{ a[3] or '-' }}</td>
+            <td>{{ a[4] or '-' }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" style="text-align: center;">No anime found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

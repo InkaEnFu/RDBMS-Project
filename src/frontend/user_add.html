@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Add User - Animelist{% endblock %}
+
+{% block content %}
+<h1>Add New User</h1>
+
+<form method="POST">
+    <label>Username *</label>
+    <input type="text" name="username" required>
+    
+    <label>Email *</label>
+    <input type="email" name="email" required>
+    
+    <button type="submit" class="btn">Add User</button>
+    <a href="/users" style="color: #aaa; margin-left: 15px;">Cancel</a>
+</form>
+{% endblock %}

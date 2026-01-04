@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Anime - Animelist{% endblock %}
+
+{% block content %}
+<h1>Add New Anime</h1>
+
+<form method="POST">
+    <label>Title (Romaji) *</label>
+    <input type="text" name="title_romaji" required>
+    
+    <label>Title (English)</label>
+    <input type="text" name="title_english">
+    
+    <label>Episodes</label>
+    <input type="number" name="episodes" value="0" min="0">
+    
+    <label>Status *</label>
+    <select name="status" required>
+        <option value="ONGOING">ONGOING</option>
+        <option value="FINISHED">FINISHED</option>
+    </select>
+    
+    <label>Start Date</label>
+    <input type="date" name="start_date">
+    
+    <label>External Score</label>
+    <input type="number" name="external_score" step="0.1" min="0" max="10">
+    
+    <label>Genres</label>
+    <div class="checkbox-group">
+        {% for genre in genres %}
+        <label>
+            <input type="checkbox" name="genres" value="{{ genre[0] }}">
+            {{ genre[1] }}
+        </label>
+        {% endfor %}
+    </div>
+    
+    <button type="submit" class="btn">Add Anime</button>
+    <a href="/anime" style="color: #aaa; margin-left: 15px;">Cancel</a>
+</form>
+{% endblock %}

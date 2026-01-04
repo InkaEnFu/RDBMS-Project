@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Watchlist Entry - Animelist{% endblock %}
+
+{% block content %}
+<h1>Add Watchlist Entry</h1>
+
+<form method="POST">
+    <label>User *</label>
+    <select name="user_id" required>
+        {% for user in users %}
+        <option value="{{ user[0] }}">{{ user[1] }}</option>
+        {% endfor %}
+    </select>
+    
+    <label>Anime *</label>
+    <select name="anime_id" required>
+        {% for a in anime %}
+        <option value="{{ a[0] }}">{{ a[1] }}</option>
+        {% endfor %}
+    </select>
+    
+    <label>Status *</label>
+    <select name="status" required>
+        <option value="PLAN_TO_WATCH">PLAN_TO_WATCH</option>
+        <option value="WATCHING">WATCHING</option>
+        <option value="COMPLETED">COMPLETED</option>
+        <option value="DROPPED">DROPPED</option>
+        <option value="PAUSED">PAUSED</option>
+    </select>
+    
+    <label>Score (1-10)</label>
+    <input type="number" name="score" min="1" max="10">
+    
+    <label>Progress (Episodes)</label>
+    <input type="number" name="progress" value="0" min="0">
+    
+    <button type="submit" class="btn">Add Entry</button>
+    <a href="/watchlist" style="color: #aaa; margin-left: 15px;">Cancel</a>
+</form>
+{% endblock %}
