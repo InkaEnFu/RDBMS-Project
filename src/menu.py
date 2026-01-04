@@ -56,6 +56,7 @@ class Menu:
             print("-" * 40)
             print("1. Add new anime")
             print("2. Find anime by ID")
+            print("3. Show all anime with genres")
             print("0. Back")
             print("-" * 40)
             
@@ -65,6 +66,8 @@ class Menu:
                 self._anime_insert()
             elif choice == "2":
                 self._anime_select_by_id()
+            elif choice == "3":
+                self._anime_with_genres_view()
             elif choice == "0":
                 break
             else:
@@ -141,6 +144,32 @@ class Menu:
                 print("Anime with this ID was not found.")
         except ValueError:
             print("Invalid ID!")
+        except Exception as e:
+            print(f"✗ Error: {e}")
+    
+    def _anime_with_genres_view(self):
+        print("\n--- All anime with genres (view) ---")
+        
+        try:
+            conn = self.anime_gw.db.get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM anime_with_genres_view")
+            results = cursor.fetchall()
+            cursor.close()
+            
+            if results:
+                print(f"\n{'ID':<5} {'Title (romaji)':<25} {'Title (english)':<25} {'Status':<12} {'Genres'}")
+                print("-" * 100)
+                for row in results:
+                    anime_id = row[0]
+                    title_romaji = (row[1][:22] + "...") if row[1] and len(row[1]) > 25 else (row[1] or "-")
+                    title_english = (row[2][:22] + "...") if row[2] and len(row[2]) > 25 else (row[2] or "-")
+                    status = row[3] or "-"
+                    genres = row[4] or "-"
+                    print(f"{anime_id:<5} {title_romaji:<25} {title_english:<25} {status:<12} {genres}")
+                print("-" * 100)
+            else:
+                print("No anime found.")
         except Exception as e:
             print(f"✗ Error: {e}")
     
