@@ -12,7 +12,7 @@ from tables.watchlist_history_gateway import WatchlistHistoryGateway
 config = Config()
 app_config = config.get_app_config()
 
-app = Flask(__name__, template_folder='frontend')
+app = Flask(__name__, template_folder='frontend', static_folder='frontend/static')
 app.secret_key = app_config.get('secret_key', 'animelist_secret_key')
 
 db = DatabaseConnection()
