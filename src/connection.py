@@ -76,7 +76,8 @@ class DatabaseConnection:
                     port=config.get("port", 3306),
                     user=config.get("user", "uzivatel"),
                     password=config.get("password", "heslo"),
-                    database=config.get("database", "animelist")
+                    database=config.get("database", "animelist"),
+                    auth_plugin='mysql_native_password'
                 )
                 print("Successfully connected to database.")
             except MySQLError as e:

@@ -2,9 +2,9 @@
     "database": {
         "host": "127.0.0.1",
         "port": 3306,
-        "user": "uzivatel",
-        "password": "heslo",
-        "database": "animelist"
+        "user": "Matyas",
+        "password": "Heslo",
+        "database": "MatyasDatabaze"
     },
     "app": {
         "debug": true,
