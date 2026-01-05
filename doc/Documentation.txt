@@ -177,6 +177,8 @@ D1 – Table Gateway / DAO / Repository
 
 Satisfied: The solution uses the Table Gateway pattern (dedicated gateway classes per table).
 
+CHECKLIST
+
 1) Real relational DBMS (not SQLite)
 
 Satisfied: MySQL (managed via MySQL Workbench).
